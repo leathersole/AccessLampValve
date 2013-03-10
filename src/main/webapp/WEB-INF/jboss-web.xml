@@ -25,6 +25,10 @@
         <param-name>onPi</param-name>
         <param-value>false</param-value>
      </param>
+     <param>
+        <param-name>pinNumber</param-name>
+        <param-value>24</param-value>
+     </param>
    </valve>
 </jboss-web>
 
