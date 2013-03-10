@@ -2,13 +2,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.redhat.sample</groupId>
-  <artifactId>simplestwar</artifactId>
+  <groupId>net.seannos.valve</groupId>
+  <artifactId>AccessLampValve</artifactId>
   <packaging>war</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.0.1</version>
 
-  <name>simplestwar</name>
-  <url>http://maven.apache.org</url>
+  <name>AccessLampValve</name>
+  <url>https://github.com/leathersole/AccessLampValve</url>
 
   <dependencies>
     <dependency>
