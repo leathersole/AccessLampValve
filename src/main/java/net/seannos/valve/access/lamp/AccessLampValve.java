@@ -21,6 +21,12 @@ public class AccessLampValve extends AccessLogValve {
 	private String pinNumber;
 	final GpioController gpio;
 	final GpioPinDigitalOutput pin;
+	
+	public AccessLampValve(){
+		gpio = GpioFactory.getInstance();
+		pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_14, "MyLED",
+				PinState.LOW);
+	}
 
 	public void setOnPi(boolean onpi) {
 		this.onPi = onpi;
@@ -36,14 +42,6 @@ public class AccessLampValve extends AccessLogValve {
 
 	public String getPinNumber() {
 		return pinNumber;
-	}
-
-	@Override
-	public void start() throws LifecycleException {
-		gpio = GpioFactory.getInstance();
-		pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_14, "MyLED",
-				PinState.LOW);
-		super.start();
 	}
 
 	@Override
