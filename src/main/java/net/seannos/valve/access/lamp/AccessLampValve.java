@@ -1,24 +1,60 @@
 package net.seannos.valve.access.lamp;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+
+import org.apache.catalina.LifecycleException;
+import org.apache.catalina.connector.Request;
+import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.AccessLogValve;
 
-public class AccessLampValve extends AccessLogValve{
-  private boolean onPi;
-  private String pinNumber;
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.RaspiPin;
 
-  public void setOnPi(boolean onpi){
-		  this.onPi = onpi;
-  }
+public class AccessLampValve extends AccessLogValve {
 
-  public boolean getOnPi(){
-		  return onPi;
-  }
+	private boolean onPi;
+	private String pinNumber;
+	final GpioController gpio;
+	final GpioPinDigitalOutput pin;
+	
+	public AccessLampValve(){
+		gpio = GpioFactory.getInstance();
+		pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_14, "MyLED",
+				PinState.LOW);
+	}
 
-  public void setPinNumber(String no){
-		  this.pinNumber = no;
-  }
+	public void setOnPi(boolean onpi) {
+		this.onPi = onpi;
+	}
 
-  public String getPinNumber(){
-		  return pinNumber;
-  }
+	public boolean getOnPi() {
+		return onPi;
+	}
+
+	public void setPinNumber(String no) {
+		this.pinNumber = no;
+	}
+
+	public String getPinNumber() {
+		return pinNumber;
+	}
+
+	@Override
+	public void stop() throws LifecycleException {
+		gpio.shutdown();
+		super.stop();
+	}
+
+	@Override
+	public void invoke(Request arg0, Response arg1) throws IOException,
+			ServletException {
+		pin.high();
+		super.invoke(arg0, arg1);
+		pin.low();
+	}
 }
