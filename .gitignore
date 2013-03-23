@@ -6,3 +6,6 @@
 *.ear
 target
 *.swp
+.classpath
+.project
+.settings
