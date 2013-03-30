@@ -1,34 +1,33 @@
 <jboss-web>
- <valve>
-   <class-name>net.seannos.valve.access.lamp.AccessLampValve</class-name>
-     <param>
-        <param-name>prefix</param-name>
-        <param-value>TestAccessLogValveWebApp</param-value>
-     </param>
-     <param>
-        <param-name>suffix</param-name>
-        <param-value>.log</param-value>
-     </param>
-     <param>
-        <param-name>pattern</param-name>
-        <param-value>%h %l %u %t "%r" %s %b %{User-Agent}i %{JSESSIONID}c</param-value>
-     </param>
-     <param>
-        <param-name>directory</param-name>
-        <param-value>../standalone/log</param-value>
-     </param>
-     <param>
-        <param-name>resolveHosts</param-name>
-        <param-value>false</param-value>
-     </param>
-     <param>
-        <param-name>onPi</param-name>
-        <param-value>false</param-value>
-     </param>
-     <param>
-        <param-name>pinNumber</param-name>
-        <param-value>24</param-value>
-     </param>
-   </valve>
+	<context-root>alv</context-root>
+	<valve>
+		<class-name>net.seannos.valve.access.lamp.AccessLampValve</class-name>
+		<param>
+			<param-name>prefix</param-name>
+			<param-value>TestAccessLogValveWebApp</param-value>
+		</param>
+		<param>
+			<param-name>suffix</param-name>
+			<param-value>.log</param-value>
+		</param>
+		<param>
+			<param-name>pattern</param-name>
+			<param-value>%h %l %u %t "%r" %s %b %{User-Agent}i %{JSESSIONID}c
+			</param-value>
+		</param>
+		<param>
+			<param-name>directory</param-name>
+			<param-value>../standalone/log</param-value>
+		</param>
+		<param>
+			<param-name>resolveHosts</param-name>
+			<param-value>false</param-value>
+		</param>
+		<param>
+			<param-name>pinNumber</param-name>
+			<!-- this value should be from com.pi4j.io.gpio.RaspiPin.GPIO_00 to 
+				com.pi4j.io.gpio.RaspiPin.GPIO_20 -->
+			<param-value>com.pi4j.io.gpio.RaspiPin.GPIO_05</param-value>
+		</param>
+	</valve>
 </jboss-web>
-
