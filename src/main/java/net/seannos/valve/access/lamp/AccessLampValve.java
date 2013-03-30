@@ -1,39 +1,38 @@
 package net.seannos.valve.access.lamp;
 
 import java.io.IOException;
-
+import java.lang.reflect.Field;
 import javax.servlet.ServletException;
-
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
+import org.apache.catalina.util.LifecycleSupport;
 import org.apache.catalina.valves.AccessLogValve;
 
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 
 public class AccessLampValve extends AccessLogValve {
 
-	private boolean onPi;
 	private String pinNumber;
-	final GpioController gpio;
-	final GpioPinDigitalOutput pin;
-	
-	public AccessLampValve(){
+	@Override
+	public void start() throws LifecycleException {
 		gpio = GpioFactory.getInstance();
-		pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_14, "MyLED",
+		pin = gpio.provisionDigitalOutputPin(getPin(pinNumber), "MyLED",
 				PinState.LOW);
+		super.start();
 	}
 
-	public void setOnPi(boolean onpi) {
-		this.onPi = onpi;
-	}
+	GpioController gpio;
+	GpioPinDigitalOutput pin;
 
-	public boolean getOnPi() {
-		return onPi;
+    protected LifecycleSupport lifecycle = new LifecycleSupport(this);
+    
+	public AccessLampValve() {
 	}
 
 	public void setPinNumber(String no) {
@@ -56,5 +55,21 @@ public class AccessLampValve extends AccessLogValve {
 		pin.high();
 		super.invoke(arg0, arg1);
 		pin.low();
+	}
+
+	private static Pin getPin(String pinNumber) {
+		String raspiPinClass = RaspiPin.class.getName();
+		if (pinNumber == null || pinNumber.startsWith(raspiPinClass) == false) {
+			throw new RuntimeException();
+		}
+		String gpioFieldName = pinNumber.replace(raspiPinClass + ".", "");
+		try {
+			Field gpioField = RaspiPin.class.getField(gpioFieldName);
+			Pin gpioPin = (Pin) gpioField.get(RaspiPin.class);
+			return gpioPin;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
 	}
 }
